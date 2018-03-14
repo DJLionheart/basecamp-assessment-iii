@@ -18,9 +18,9 @@ class App extends React.Component {
   addTask(e){ //passing in the event itself.
     e.preventDefault(); //makes sure the page doesn't refresh when form is submitted.
     const {taskList} = this.state; //this will get taskList from the state.
-    const newItem = this.newItem.value;
+    const newTask = this.newTask.value;
 
-    const isOnTheList = taskList.includes(newItem);
+    const isOnTheList = taskList.includes(newTask);
 
     if(isOnTheList){
 
@@ -29,8 +29,8 @@ class App extends React.Component {
       })
 
     } else {
-      newItem !== '' && this.setState({ //If the newItem is not empty, then we will set it and add to state. If empty, it won't run.
-        taskList: [...this.state.taskList, newItem], //... is the spread operator, spreads the previously stored items.
+      newTask !== '' && this.setState({ //If the newTask is not empty, then we will set it and add to state. If empty, it won't run.
+        taskList: [...this.state.taskList, newTask], //... is the spread operator, spreads the previously stored tasks.
         message: ''
       })
     }
@@ -38,14 +38,9 @@ class App extends React.Component {
     this.addForm.reset();
   }
 
-  removeItem(item){
-    const newTask = this.state.taskList.filter(buyItem => {
-      return buyItem !== item; 
-      
-/*When calling removeItem(), if the values under the buyItem property of state are not equal to 'item'
-(what we're passing into the method), they are returned as we filter through the array. The 'item' we
-enter is not kept on the filtered array. */
-
+  completeTask(task){
+    const newTask = this.state.taskList.filter(taskList => {
+      return taskList !== task; 
     });
 
     this.setState({
@@ -61,6 +56,10 @@ enter is not kept on the filtered array. */
     }
 
   } 
+
+  /*When calling completeTask(), if the values under the taskList property of state are not equal to 'task'
+(what we're passing into the method), they are returned as we filter through the array. The 'task' we
+enter is not kept on the filtered array. */
 
   clearAll(){
     this.setState({
@@ -81,8 +80,8 @@ enter is not kept on the filtered array. */
 
           <form ref={input => this.addForm = input} className="form-inline" onSubmit={(e) => {this.addTask(e)}}>
             <div className="form-group">
-              <label className="sr-only" htmlFor="newItemInput">Add New Item</label>
-              <input ref={input => this.newItem = input}type="text" placeholder="New Task" className="form-control" id="newItemInput" />
+              
+              <input ref={input => this.newTask = input}type="text" placeholder="New Task" className="form-control" id="newTaskInput" />
             </div>
             <button type="submit" className="btn btn-primary">Add</button>
           </form>
@@ -102,14 +101,14 @@ enter is not kept on the filtered array. */
             </thead>
             <tbody>
               {
-                taskList.map(item => {
+                taskList.map(task => {
                   return (
-                    <tr key={item}>
+                    <tr key={task}>
                       <th scope="row"><FontAwesome name='tasks' /></th>
-                      <td>{item}</td>
+                      <td>{task}</td>
                       <td className="text-right">
-                        <button onClick={(e) => this.removeItem(item)} type="button" className="btn-default btn-sm">
-                          Remove
+                        <button onClick={(e) => this.completeTask(task)} type="button" className="btn-default btn-sm">
+                          Done!
                         </button>
                       </td>
                     </tr> 
